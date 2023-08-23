@@ -1,0 +1,58 @@
+@import '@fontsource/poppins';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+}
+
+body {
+    background-color: rgb(205, 214, 219);
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    color:rgb(50, 51, 51);
+    height: 10vh;
+}
+
+section {
+    height: 90vh;
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    background-color: rgb(24, 189, 226);
+    padding: 1rem;
+    font-size: 2rem;
+    width: 30%;
+    border: 3px rgb(24, 189, 226) solid;
+    border-radius: 15px;
+    color: #fff;
+    transition: all 0.2s ease-out;  
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: transparent;
+    color: rgb(24, 189, 226);
+}
+
+.graph {
+    display: flex;
+    align-items: flex-end;
+}
+
+.stick {
+    background-color: rgb(24, 189, 226);
+    width: 10px
+}
+
