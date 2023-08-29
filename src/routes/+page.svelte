@@ -1,15 +1,19 @@
 <script lang="ts">
 
-    type State = "start" | "playing" | "done";
-    let currentState: State = "start";
-
-    let numbersToSort = Array.from({length: 100}, () => Math.floor(Math.random() * 100));
+    let playing: boolean;
+    let algorithms: Algorithm[];
+    let numbersToSort: number[];
+    type Algorithm = {
+        name: string,
+        selected: boolean,
+        function: (array: number[]) => Promise<void>
+    };
 
     function delay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async function bubbleSort(array: number[])
+    const bubbleSort = async (array: number[]) =>
     {
         let swapped: boolean = false;
         for (let i = 0; i < array.length; i ++)
@@ -23,31 +27,113 @@
                     array[j] = array[j + 1];
                     array[j + 1] = temp;
                     swapped = true;
-                    await delay(5);
+                    if (playing == false)
+                        return ;
+                    await delay(2);
                     numbersToSort = [...array];
                 }
             }
             if (!swapped)
-            {
-                currentState = "done";
                 break ;
-            }
         }
     }
+
+    const quickSort = async (array: number[]) => 
+    {
+        let swapped: boolean = false;
+        for (let i = 0; i < array.length; i ++)
+        {
+            swapped = false;
+            for (let j = 0; j < array.length - 1; j ++)
+            {
+                if (array[j] > array[j + 1])
+                {
+                    const temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                    swapped = true;
+                    if (playing == false)
+                        return ;
+                    await delay(2);
+                    numbersToSort = [...array];
+                }
+            }
+            if (!swapped)
+                break ;
+        }
+    }
+    
+    algorithms = [{
+        name: "bubble_sort",
+        selected: true,
+        function: bubbleSort
+    },
+    {
+        name: "quick_sort",
+        selected: false,
+        function: quickSort
+    }];
+    playing = false;
+    numbersToSort = generateRandomNumbers();
+
+    function generateRandomNumbers(): number[]
+    {
+        let randomNumbers: number[];
+
+        randomNumbers = Array.from({length: 100}, () => Math.floor(Math.random() * 100));
+        console.log(randomNumbers);
+        return randomNumbers;
+    }
+
+    function toggleAlgorithm(i: number)
+    {
+        algorithms.map(algorithm => algorithm.selected = false);
+        algorithms[i].selected = true;
+    }
+
+    function playSelected()
+    {
+        playing = true;
+        for (let algorithm of algorithms)
+            if (algorithm.selected)
+                algorithm.function(numbersToSort);
+    }
+
 </script>
 
 <main>
     <h1>algorithm visualisr</h1>
     <section>
-    {#if currentState === "start"}
-        <button on:click={() => {currentState = "playing"; bubbleSort(numbersToSort);}}>Play</button>
-    {/if}
-    {#if currentState === "playing" || currentState === "done"}
+        <div class="row">
+            <button class:selected={algorithms[0].selected}
+                    on:click={() => toggleAlgorithm(0)}>
+                Bubble Sort
+            </button>
+            <button class:selected={algorithms[1].selected}
+                    on:click={() => toggleAlgorithm(1)}>
+            Quick Sort</button>
+        </div>
         <div class="graph">
             {#each numbersToSort as number}
                 <div class="stick" style="height: {number * 3}px;"></div>
             {/each}
         </div>
-    {/if}
+        {#if !playing}
+            <button on:click={() => {playSelected();}}>Play</button>
+        {:else}
+            <button on:click={() => {playing = false; numbersToSort = generateRandomNumbers();}}>Reset</button>
+        {/if}
     </section>
 </main>
+
+<style>
+    .graph {
+    display: flex;
+    align-items: flex-end;
+    }
+
+    .stick {
+        background-color: var(--primary);
+        width: 10px
+    }
+</style>

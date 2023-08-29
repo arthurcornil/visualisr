@@ -1,5 +1,11 @@
 @import '@fontsource/poppins';
 
+:root {
+    --primary: rgb(80, 170, 190);
+    --light: rgb(225, 230, 233);
+    --black: rgb(50, 51, 51);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +14,7 @@
 }
 
 body {
-    background-color: rgb(205, 214, 219);
+    background-color: var(--light);
 }
 
 h1 {
@@ -16,7 +22,7 @@ h1 {
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
-    color:rgb(50, 51, 51);
+    color: var(--black);
     height: 10vh;
 }
 
@@ -25,34 +31,36 @@ section {
     width: 90%;
     margin: auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
 }
 
 button {
-    background-color: rgb(24, 189, 226);
+    background-color: transparent;
+    color: var(--primary);
     padding: 1rem;
     font-size: 2rem;
     width: 30%;
-    border: 3px rgb(24, 189, 226) solid;
-    border-radius: 15px;
-    color: #fff;
+    border: 2px var(--primary) solid;
+    border-radius: 10px;
     transition: all 0.2s ease-out;  
     cursor: pointer;
 }
 
 button:hover {
-    background-color: transparent;
-    color: rgb(24, 189, 226);
+    background-color: var(--primary);
+    color: #fff;
 }
 
-.graph {
+.row {
+    width: 70vw;
     display: flex;
-    align-items: flex-end;
+    justify-content: space-around;
 }
 
-.stick {
-    background-color: rgb(24, 189, 226);
-    width: 10px
+.selected {
+    background-color: var(--primary);
+    color: #fff;
 }
 
