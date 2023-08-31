@@ -38,30 +38,42 @@
         }
     }
 
-    const quickSort = async (array: number[]) => 
+    const quickSort = async (array: number[], low: number = 0, high: number = array.length - 1) => 
     {
-        let swapped: boolean = false;
-        for (let i = 0; i < array.length; i ++)
+        if (low >= high)
+            return ;
+        const pivotIndex = await partition(array, low, high);
+        await quickSort(array, low, pivotIndex - 1);
+        await quickSort(array, pivotIndex + 1, high);
+    };
+
+    async function partition (array: number[], low: number, high: number): Promise<number>
+    {
+        const pivot = array[high];
+        let i = low - 1;
+
+        for (let j = low; j < high; j++)
         {
-            swapped = false;
-            for (let j = 0; j < array.length - 1; j ++)
-            {
-                if (array[j] > array[j + 1])
-                {
-                    const temp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = temp;
-                    swapped = true;
-                    if (playing == false)
-                        return ;
-                    await delay(2);
-                    numbersToSort = [...array];
-                }
-            }
-            if (!swapped)
-                break ;
+            if (array[j] >= pivot)
+                continue ;
+            i++;
+            const temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+
+            await delay(2);
+            numbersToSort = [...array];
         }
-    }
+
+        const temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+
+        await delay(2);
+        numbersToSort = [...array];
+
+        return i + 1;
+    };
     
     algorithms = [{
         name: "bubble_sort",
@@ -81,7 +93,6 @@
         let randomNumbers: number[];
 
         randomNumbers = Array.from({length: 100}, () => Math.floor(Math.random() * 100));
-        console.log(randomNumbers);
         return randomNumbers;
     }
 
