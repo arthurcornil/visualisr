@@ -27,7 +27,7 @@
                     array[j] = array[j + 1];
                     array[j + 1] = temp;
                     swapped = true;
-                    if (playing == false)
+                    if (!playing)
                         return ;
                     await delay(2);
                     numbersToSort = [...array];
@@ -40,6 +40,8 @@
 
     const quickSort = async (array: number[], low: number = 0, high: number = array.length - 1) => 
     {
+        if (!playing)
+            return ;
         if (low >= high)
             return ;
         const pivotIndex = await partition(array, low, high);
@@ -90,14 +92,18 @@
 
     function generateRandomNumbers(): number[]
     {
-        let randomNumbers: number[];
-
-        randomNumbers = Array.from({length: 100}, () => Math.floor(Math.random() * 100));
+        let randomNumbers = Array.from({length: 100}, () => Math.floor(Math.random() * 100));
         return randomNumbers;
     }
 
-    function toggleAlgorithm(i: number)
+    async function toggleAlgorithm(i: number)
     {
+        if (playing)
+        {
+            playing = false;
+            await delay(100);
+            numbersToSort = generateRandomNumbers();
+        }
         algorithms.map(algorithm => algorithm.selected = false);
         algorithms[i].selected = true;
     }
@@ -132,7 +138,7 @@
         {#if !playing}
             <button on:click={() => {playSelected();}}>Play</button>
         {:else}
-            <button on:click={() => {playing = false; numbersToSort = generateRandomNumbers();}}>Reset</button>
+            <button on:click={async () => {playing = false; await delay(100); numbersToSort = generateRandomNumbers();}}>Reset</button>
         {/if}
     </section>
 </main>
